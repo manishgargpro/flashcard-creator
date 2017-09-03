@@ -1,10 +1,10 @@
 var inquirer = require("inquirer");
 
-var BasicCard = require("BasicCard.js");
+var fs = require("fs")
 
-var ClozeCard = require("ClozeCard.js");
+var BasicCard = require("./BasicCard.js");
 
-var cardArr = [];
+var ClozeCard = require("./ClozeCard.js");
 
 var createCard = function () {
 	inquirer.prompt([
@@ -30,17 +30,28 @@ var createCard = function () {
 	]).then(function(answers){
 		if (answers.cardType == "Basic Card") {
 			var newCard = new BasicCard(answers.text1, answers.text2);
-			cardArr.push(newCard);
+			fs.appendFile("card-array.json", JSON.stringify(newCard, null, 2) + "\n", function (error) {
+				if (error) {console.log(error)}
+			});
 		} else if (answers.cardType == "Cloze Card") {
 			var newCard = new ClozeCard(answers.text1, answers.text2);
-			cardArr.push(newCard);
+			fs.appendFile("card-array.json", JSON.stringify(newCard, null, 2) + "\n", function (error) {
+				if (error) {console.log(error)}
+			});
 		}
 		if (answers.createMore) {
 			createCard();
 		} else {
-			console.log(cardArr);
+			renderCards();
 		}
 	});
+}
+
+var renderCards = function () {
+	fs.readFile("card-array.json", "utf8", function(error, data){
+		if (error) {console.log(error)};
+		console.log(data);
+	})
 }
 
 createCard();
