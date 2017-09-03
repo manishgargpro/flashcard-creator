@@ -34,10 +34,14 @@ var createCard = function () {
 				if (error) {console.log(error)}
 			});
 		} else if (answers.cardType == "Cloze Card") {
-			var newCard = new ClozeCard(answers.text1, answers.text2);
-			fs.appendFile("card-array.json", JSON.stringify(newCard, null, 2) + "\n", function (error) {
-				if (error) {console.log(error)}
-			});
+			if (answers.text1.includes("...")) {
+				var newCard = new ClozeCard(answers.text1, answers.text2);
+				fs.appendFile("card-array.json", JSON.stringify(newCard, null, 2) + "\n", function (error) {
+					if (error) {console.log(error)}
+				});
+			} else {
+				console.log('Error: unable to create cloze card: ' + '"' + answers.text1 + '"' + ' needs "..." in place of answer')
+			}
 		}
 		if (answers.createMore) {
 			createCard();

@@ -4,7 +4,7 @@ var ClozeCard = function (partialText, clozeDeletion) {
 	this.answer = clozeDeletion;
 	this.complete = function () {
 		var n = this.incomplete.replace("...", this.answer);
-		console.log(n);
+		return n;
 	}
 }
 
